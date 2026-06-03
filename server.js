@@ -286,8 +286,8 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Direct Invitations Setup
-  socket.on('send-invite', ({ targetUserId }) => {
+  // Direct Instant Chat Setup
+  socket.on('start-direct-chat', ({ targetUserId }) => {
     const sender = onlineUsers.get(socket.id);
     if (!sender) return;
 
@@ -304,73 +304,34 @@ io.on('connection', (socket) => {
 
     if (targetSocketId && targetUser && targetUser.status === 'lobby') {
       const roomId = `room_direct_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
-      const inviteId = `inv_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+      
+      sender.status = 'chatting';
+      sender.roomId = roomId;
+      targetUser.status = 'chatting';
+      targetUser.roomId = roomId;
 
-      io.to(targetSocketId).emit('incoming-invite', {
-        id: inviteId,
-        senderId: sender.id,
-        senderName: sender.nickname,
-        senderAge: sender.age,
-        senderGender: sender.gender,
-        senderCountry: sender.country,
-        roomId: roomId
+      activeRooms.set(roomId, {
+        id: roomId,
+        user1: { ...sender, socketId: socket.id },
+        user2: { ...targetUser, socketId: targetSocketId },
+        messages: [],
+        createdAt: Date.now()
       });
 
-      // Keep sender updated
-      socket.emit('invite-sent', { inviteId, targetUserId, roomId });
+      const s1 = io.sockets.sockets.get(socket.id);
+      const s2 = io.sockets.sockets.get(targetSocketId);
+      
+      if (s1) s1.join(roomId);
+      if (s2) s2.join(roomId);
+
+      // Emit direct-chat-started to both
+      io.to(socket.id).emit('direct-chat-started', { roomId, peer: targetUser });
+      io.to(targetSocketId).emit('direct-chat-started', { roomId, peer: sender });
+
+      broadcastLobbyState();
+      updateAdminDashboard();
     } else {
-      socket.emit('invite-failed', "User is unavailable or offline.");
-    }
-  });
-
-  socket.on('respond-invite', ({ inviteId, senderId, status, roomId }) => {
-    const responder = onlineUsers.get(socket.id);
-    if (!responder) return;
-
-    // Find sender socket ID
-    let senderSocketId = null;
-    for (const [sid, user] of onlineUsers.entries()) {
-      if (user.id === senderId) {
-        senderSocketId = sid;
-        break;
-      }
-    }
-
-    if (status === 'accepted') {
-      const sender = onlineUsers.get(senderSocketId);
-      if (sender && sender.status === 'lobby' && responder.status === 'lobby') {
-        sender.status = 'chatting';
-        sender.roomId = roomId;
-        responder.status = 'chatting';
-        responder.roomId = roomId;
-
-        activeRooms.set(roomId, {
-          id: roomId,
-          user1: { ...sender, socketId: senderSocketId },
-          user2: { ...responder, socketId: socket.id },
-          messages: [],
-          createdAt: Date.now()
-        });
-
-        const s1 = io.sockets.sockets.get(senderSocketId);
-        if (s1) s1.join(roomId);
-        socket.join(roomId);
-
-        io.to(senderSocketId).emit('invite-response', { inviteId, status: 'accepted', peer: responder });
-        socket.emit('invite-response', { inviteId, status: 'accepted', peer: sender });
-
-        broadcastLobbyState();
-        updateAdminDashboard();
-      } else {
-        socket.emit('invite-failed', "Sender is no longer available.");
-        if (senderSocketId) {
-          io.to(senderSocketId).emit('invite-failed', "Session established failed.");
-        }
-      }
-    } else {
-      if (senderSocketId) {
-        io.to(senderSocketId).emit('invite-response', { inviteId, status: 'declined' });
-      }
+      socket.emit('direct-chat-failed', "User is unavailable or offline.");
     }
   });
 

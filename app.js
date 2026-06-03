@@ -403,54 +403,11 @@ document.addEventListener('DOMContentLoaded', () => {
       showOfflineView();
     });
 
-    socket.on('incoming-invite', (invite) => {
-      const currentUser = getCurrentUser();
-      if (!currentUser || currentUser.status !== 'lobby') return;
-
-      inviteSenderName.textContent = invite.senderName;
-      inviteAvatar.textContent = invite.senderName.charAt(0).toUpperCase();
-      inviteAvatar.className = 'invite-avatar ' + (invite.senderGender === 'Female' ? 'pink' : 'blue');
-      inviteNotification.classList.add('active');
-
-      btnInviteAccept.onclick = () => {
-        socket.emit('respond-invite', {
-          inviteId: invite.id,
-          senderId: invite.senderId,
-          status: 'accepted',
-          roomId: invite.roomId
-        });
-        inviteNotification.classList.remove('active');
-      };
-
-      btnInviteDecline.onclick = () => {
-        socket.emit('respond-invite', {
-          inviteId: invite.id,
-          senderId: invite.senderId,
-          status: 'declined',
-          roomId: invite.roomId
-        });
-        inviteNotification.classList.remove('active');
-      };
+    socket.on('direct-chat-started', ({ roomId, peer }) => {
+      joinRoom(roomId, peer);
     });
 
-    socket.on('invite-sent', ({ inviteId, targetUserId, roomId }) => {
-      initiateDirectInviteProgress(inviteId);
-    });
-
-    socket.on('invite-response', ({ inviteId, status, peer }) => {
-      cancelMatchSimulation();
-      closeModal(modalMatch);
-
-      if (status === 'accepted') {
-        joinRoom(currentRoomId, peer);
-      } else {
-        alert("The user declined your chat request.");
-      }
-    });
-
-    socket.on('invite-failed', (msg) => {
-      cancelMatchSimulation();
-      closeModal(modalMatch);
+    socket.on('direct-chat-failed', (msg) => {
       alert(msg);
     });
 
@@ -969,50 +926,18 @@ document.addEventListener('DOMContentLoaded', () => {
     checkUserInactivity();
   }, 1000);
 
-  // --- Direct Match / Chat Invitation ---
-  let matchTimers = [];
-
+  // --- Direct Chat Handler ---
   function sendChatInvitation(targetUser) {
     const currentUser = getCurrentUser();
     if (!currentUser) return;
 
     if (socket && socket.connected) {
-      socket.emit('send-invite', { targetUserId: targetUser.id });
+      socket.emit('start-direct-chat', { targetUserId: targetUser.id });
     }
   }
 
-  function initiateDirectInviteProgress(inviteId) {
-    cancelMatchSimulation();
-    
-    searchingContainer.classList.remove('hidden');
-    matchSuccessContainer.classList.add('hidden');
-    
-    openModal(modalMatch);
-
-    const stages = [
-      { delay: 0, text: `Initiating handshake request...`, tip: "Routing private handshake..." },
-      { delay: 1800, text: `Waiting for response...`, tip: "Verifying session tokens..." },
-      { delay: 4000, text: `Waiting for user acceptance...`, tip: "Request pending. Do not close this panel." }
-    ];
-
-    stages.forEach(stage => {
-      const timer = setTimeout(() => {
-        matchStatusText.textContent = stage.text;
-        matchStatusTip.textContent = stage.tip;
-      }, stage.delay);
-      matchTimers.push(timer);
-    });
-  }
-
   function cancelMatchSimulation() {
-    matchTimers.forEach(timer => {
-      clearTimeout(timer);
-    });
-    matchTimers = [];
-    matchStatusText.textContent = "Finding someone online...";
-    matchStatusText.style.color = '';
-    matchStatusTip.textContent = "Verifying network connection to ensure 100% human match.";
-    btnCancelMatch.textContent = "Cancel Search";
+    // Obsolete for direct instant chats
   }
 
   // --- Legal Modals ---
