@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatibb Admin | Platform Moderation Dashboard</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Floating Glow Blobs -->
+  <div class="glow-blob glow-blob-blue"></div>
+  <div class="glow-blob glow-blob-pink"></div>
+
+  <!-- ADMIN LOGIN GATE -->
+  <div class="login-overlay" id="admin-login-overlay">
+    <div class="login-box">
+      <h2>Chatibb Admin Gate</h2>
+      <p>Secure authentication required for platform moderation dashboard access.</p>
+      
+      <div class="login-error hidden" id="login-error-msg">Incorrect credentials. Please try again.</div>
+      
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label for="admin-username">Username</label>
+          <input type="text" id="admin-username" placeholder="Enter admin username" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label for="admin-password">Password</label>
+          <input type="password" id="admin-password" placeholder="Enter password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+          Login to Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN ADMIN DASHBOARD LAYOUT -->
+  <div class="admin-container hidden" id="admin-dashboard-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; stroke: url(#logo-grad); fill: none; stroke-width: 2.5;">
+            <defs>
+              <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f0ff" />
+                <stop offset="100%" stop-color="#ff007f" />
+              </linearGradient>
+            </defs>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          Chatibb Admin
+        </div>
+        <span class="admin-badge">Lite Panel</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" data-tab="overview">
+          <span class="icon">📊</span> Overview
+        </button>
+        <button class="nav-btn" data-tab="users">
+          <span class="icon">👥</span> Online Users
+        </button>
+        <button class="nav-btn" data-tab="chats">
+          <span class="icon">💬</span> Active Chats
+        </button>
+        <button class="nav-btn" data-tab="reports">
+          <span class="icon">🚨</span> Reports Panel
+        </button>
+        <button class="nav-btn" data-tab="audit">
+          <span class="icon">📜</span> Audit Log
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="admin-profile">
+          <div class="admin-avatar">A</div>
+          <div class="admin-info">
+            <h4>Administrator</h4>
+            <p>Role: Super Moderation</p>
+          </div>
+        </div>
+        <button class="btn-logout" id="btn-admin-logout">
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-main">
+      <header class="main-header">
+        <h1 id="tab-title">Dashboard Overview</h1>
+        <div class="admin-time" id="admin-clock">00:00:00</div>
+      </header>
+
+      <div class="main-content">
+        
+        <!-- TAB 1: OVERVIEW -->
+        <section class="tab-section" id="tab-overview">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue">👥</div>
+              <div class="stat-details">
+                <h3 id="stat-online-users">0</h3>
+                <p>Online Users</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon pink">💬</div>
+              <div class="stat-details">
+                <h3 id="stat-active-chats">0</h3>
+                <p>Active Conversations</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple">⚡</div>
+              <div class="stat-details">
+                <h3 id="stat-matching-queue">0</h3>
+                <p>Users in Queue</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon red">🚨</div>
+              <div class="stat-details">
+                <h3 id="stat-pending-reports">0</h3>
+                <p>Pending Reports</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-overview-row" style="margin-top: 30px; display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+            <div class="lobby-card">
+              <h3>Moderation Status Details</h3>
+              <p style="margin-bottom: 16px; font-size: 0.92rem; color: var(--text-muted);">
+                Welcome to Chatibb Super Moderation Console. Keep conversations safe by evaluating live user connections, processing reports, and issuing warning chimes or suspensions. All commands execute immediately and sync across user tabs.
+              </p>
+              <div style="display: flex; gap: 16px;">
+                <div class="info-badge green">Real-Time Sync: Connected</div>
+                <div class="info-badge blue">Database Mode: Transient Storage</div>
+              </div>
+            </div>
+            <div class="lobby-card">
+              <h3>Ban Actions Count</h3>
+              <div style="font-size: 2.25rem; font-weight: 800; color: var(--pink-glow);" id="ban-count-val">0</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Active temporary suspensions in localStorage</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: ONLINE USERS -->
+        <section class="tab-section hidden" id="tab-users">
+          <div class="table-container">
+            <table class="admin-table" id="users-table">
+              <thead>
+                <tr>
+                  <th>Nickname</th>
+                  <th>ID</th>
+                  <th>Age / Gender</th>
+                  <th>Country</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody">
+                <!-- User rows rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 3: ACTIVE CHATS -->
+        <section class="tab-section hidden" id="tab-chats">
+          <div class="table-container">
+            <table class="admin-table" id="chats-table">
+              <thead>
+                <tr>
+                  <th>Room ID</th>
+                  <th>Initiator (User 1)</th>
+                  <th>Target (User 2)</th>
+                  <th>Active Duration</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="chats-tbody">
+                <!-- Active chats rows rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 4: REPORTS PANEL -->
+        <section class="tab-section hidden" id="tab-reports">
+          <div class="table-container">
+            <table class="admin-table" id="reports-table">
+              <thead>
+                <tr>
+                  <th>Reported Nickname</th>
+                  <th>Reporter</th>
+                  <th>Reason</th>
+                  <th>Time Submitted</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reports-tbody">
+                <!-- Report rows rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 5: AUDIT LOG -->
+        <section class="tab-section hidden" id="tab-audit">
+          <div class="table-container">
+            <table class="admin-table" id="audit-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Action</th>
+                  <th>Admin User</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody">
+                <!-- Audit logs rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: USER DETAILS -->
+  <div class="modal-overlay" id="modal-user-details">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h2>Connection Metadata</h2>
+        <div class="modal-close" id="btn-close-details">&times;</div>
+      </div>
+      <div class="modal-body" id="user-details-body">
+        <!-- Details loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

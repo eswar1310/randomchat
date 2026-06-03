@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatibb | Meet Real People Instantly - Anonymous Chat</title>
+  <meta name="description" content="Chatibb is a free, fast, and modern anonymous chat website to meet real people online. No bots, no AI, no registration required. Match instantly with strangers.">
+  <meta name="keywords" content="anonymous chat, chatibb, meet strangers, free chat, no registration chat, online chat room">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://chatibb.com/">
+  <meta property="og:title" content="Chatibb | Meet Real People Instantly - Anonymous Chat">
+  <meta property="og:description" content="Chatibb is a free, fast, and modern anonymous chat website to meet real people online. No bots, no AI, no registration required. Match instantly with strangers.">
+  <meta property="og:image" content="https://chatibb.com/og-image.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://chatibb.com/">
+  <meta property="twitter:title" content="Chatibb | Meet Real People Instantly - Anonymous Chat">
+  <meta property="twitter:description" content="Chatibb is a free, fast, and modern anonymous chat website to meet real people online. No bots, no AI, no registration required. Match instantly with strangers.">
+  <meta property="twitter:image" content="https://chatibb.com/og-image.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Connection Status Banner -->
+  <div class="connection-banner hidden" id="connection-banner">
+    <span class="connection-banner-dot"></span>
+    <span id="connection-banner-text">Connected</span>
+  </div>
+
+  <!-- Floating Glow Blobs -->
+  <div class="glow-blob glow-blob-blue"></div>
+  <div class="glow-blob glow-blob-pink"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-container">
+      <a href="#" class="logo" id="logo-link">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f0ff" />
+              <stop offset="100%" stop-color="#ff007f" />
+            </linearGradient>
+          </defs>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        Chatibb
+      </a>
+      
+      <!-- Right-side header items -->
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <!-- Session badge: Visible only when logged in -->
+        <div class="session-badge hidden" id="user-session-badge">
+          <span class="user-avatar-mini blue" id="session-avatar">S</span>
+          <span class="session-name" id="session-display-name">Spectre</span>
+          <button class="btn-disconnect-header" id="btn-disconnect-header" title="Disconnect Session">
+            <svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.1em" width="1.1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Global online user count badge -->
+        <div class="online-badge">
+          <span class="pulse-dot"></span>
+          <span><span id="online-counter" class="online-count">0</span> Users Online</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      
+      <!-- GUEST MODE VIEW -->
+      <div id="guest-hero-content">
+        <div class="hero-tag">
+          <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          100% Real Strangers. Zero Bots.
+        </div>
+        
+        <h1 class="hero-title">Meet <span>Real People</span> Instantly</h1>
+        <p class="hero-subtitle">Anonymous chat with real people online. No registration, no logs, no AI bots. Match instantly with strangers worldwide.</p>
+        
+        <div class="hero-ctas">
+          <button class="btn btn-primary" id="btn-start-chat">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.1em" width="1.1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            Start Random Chat
+          </button>
+          <button class="btn btn-secondary" id="btn-browse-users">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.1em" width="1.1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Browse Online Users
+          </button>
+        </div>
+      </div>
+
+      <!-- LOBBY MODE VIEW (Active Session) -->
+      <div id="lobby-hero-content" class="hidden">
+        <div class="lobby-header-row">
+          <h1 class="lobby-title">Welcome to the Lobby, <span id="lobby-username" class="logo">Guest</span>!</h1>
+          <button class="btn btn-secondary btn-sm" id="btn-lobby-disconnect" style="padding: 10px 20px; font-size: 0.85rem; border-radius: 12px;">
+            <svg stroke="currentColor" fill="none" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.1em" width="1.1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Disconnect
+          </button>
+        </div>
+
+        <div class="lobby-layout-grid">
+          <!-- Left side: Session Profile Panel & Match Engine -->
+          <div class="lobby-left-panel">
+            <div class="lobby-card session-details-card">
+              <h3>My Profile Badge</h3>
+              <div class="session-info-list">
+                <div class="info-item">
+                  <span class="info-label">User ID:</span>
+                  <span class="info-value" id="session-id-val">usr_xxxxxx</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Age / Gender:</span>
+                  <span class="info-value" id="session-age-gender-val">18 / Male</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Location:</span>
+                  <span class="info-value" id="session-country-val">🇺🇸 United States</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Status:</span>
+                  <span class="info-value status-active"><span class="status-pulse-dot"></span> Active</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="lobby-card match-engine-card" style="margin-top: 20px;">
+              <h3>Anonymous Matcher</h3>
+              <p>Ready to meet someone new? Match randomly with an online stranger immediately.</p>
+              <button class="btn btn-primary" id="btn-lobby-start" style="width: 100%; justify-content: center; margin-top: 16px;">
+                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.1em" width="1.1em" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Start Random Match
+              </button>
+            </div>
+          </div>
+
+          <!-- Right side: Real-time Online Users Lobby -->
+          <div class="lobby-right-panel">
+            <div class="lobby-card users-list-card">
+              <div class="users-list-header">
+                <h2><span id="lobby-online-count" class="online-count">0</span> Users Online</h2>
+                <div class="live-indicator"><span class="live-pulse"></span> LIVE SYNC</div>
+              </div>
+
+              <!-- Filters & Sorting bar -->
+              <div class="controls-bar">
+                <div class="control-item">
+                  <label for="filter-gender">Gender</label>
+                  <select id="filter-gender">
+                    <option value="all">All Genders</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="control-item">
+                  <label for="filter-country">Country</label>
+                  <select id="filter-country">
+                    <option value="all">All Countries</option>
+                    <option value="US">🇺🇸 United States</option>
+                    <option value="JP">🇯🇵 Japan</option>
+                    <option value="GB">🇬🇧 United Kingdom</option>
+                    <option value="DE">🇩🇪 Germany</option>
+                    <option value="FR">🇫🇷 France</option>
+                    <option value="CA">🇨🇦 Canada</option>
+                    <option value="BR">🇧🇷 Brazil</option>
+                    <option value="IN">🇮🇳 India</option>
+                    <option value="AU">🇦🇺 Australia</option>
+                    <option value="ES">🇪🇸 Spain</option>
+                  </select>
+                </div>
+
+                <div class="control-item">
+                  <label for="sort-order">Sort By</label>
+                  <select id="sort-order">
+                    <option value="newest">Newest Online</option>
+                    <option value="oldest">Oldest Online</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Dynamic Users Grid -->
+              <div class="lobby-users-grid" id="lobby-users-grid">
+                <!-- User Cards will be rendered dynamically -->
+              </div>
+
+              <!-- Empty State -->
+              <div class="lobby-empty-state hidden" id="lobby-empty-state">
+                <div class="empty-state-icon">👥</div>
+                <p>No other users are currently online.</p>
+                <span class="empty-state-tip">Open another window/tab to register another user and test real-time synchronization!</span>
+                <div style="display: flex; gap: 12px; margin-top: 20px; justify-content: center;">
+                  <button class="btn btn-secondary btn-sm" id="btn-empty-retry" style="padding: 10px 16px; border-radius: 10px; font-size: 0.8rem;">Retry List</button>
+                  <button class="btn btn-primary btn-sm" id="btn-empty-queue" style="padding: 10px 16px; border-radius: 10px; font-size: 0.8rem;">Enter Matching Queue</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRIVATE ONE-TO-ONE CHAT VIEW -->
+      <div id="chat-view" class="chat-view-container hidden">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="chat-peer-info">
+            <div class="chat-peer-avatar blue" id="chat-peer-avatar">S</div>
+            <div class="chat-peer-details">
+              <h4><span id="chat-peer-name">Sophia</span> <span id="chat-peer-flag">🇬🇧</span></h4>
+              <p><span id="chat-peer-meta">19 • Female</span> • <span class="status-indicator-text" id="chat-peer-status-text">Online</span></p>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <button class="chat-control-btn next" id="btn-chat-next" title="Match with someone else">Next Person ➔</button>
+            <button class="chat-control-btn danger" id="btn-chat-block" title="Block User">Block</button>
+            <button class="chat-control-btn" id="btn-chat-report" title="Report User">Report</button>
+            <button class="chat-control-btn leave" id="btn-chat-leave" title="Leave Chat">Leave Chat</button>
+          </div>
+        </div>
+
+        <!-- Messages Scrolling Box -->
+        <div class="chat-messages-area" id="chat-messages-area">
+          <!-- Dynamic bubbles will be rendered here -->
+        </div>
+
+        <!-- Typing Indicator Row -->
+        <div class="chat-typing-row hidden" id="chat-typing-row">
+          <span class="typing-text"><span id="chat-typing-name">Sophia</span> is typing...</span>
+        </div>
+
+        <!-- Message Input Area -->
+        <div class="chat-input-area">
+          <button class="chat-emoji-btn" id="chat-emoji-btn" title="Add Emoji">😊</button>
+          <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+          <button class="chat-send-btn" id="chat-send-btn">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Offline Overlay Panel -->
+        <div class="offline-overlay hidden" id="offline-overlay">
+          <div class="offline-box">
+            <div class="offline-icon">⚠️</div>
+            <h3 id="offline-title">Your chat partner has disconnected</h3>
+            <p id="offline-desc">The connection to your partner was lost. You can find another person right now or safely return to the lobby.</p>
+            <div class="offline-actions">
+              <button class="btn btn-primary" id="btn-offline-next">Find Another Person</button>
+              <button class="btn btn-secondary" id="btn-offline-lobby">Return to Lobby</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2 class="features-title">Why Choose Chatibb?</h2>
+      
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper blue">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.2em" width="1.2em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <h3>No Registration Required</h3>
+          <p>Skip the forms and profiles. Just click start and enter the chat room instantly. Your anonymity is fully protected.</p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper pink">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.2em" width="1.2em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3>Real People Only</h3>
+          <p>We enforce strict anti-bot measures. No artificial intelligence chat partners, no fake accounts, only authentic connections.</p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper blue">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.2em" width="1.2em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+          </div>
+          <h3>Random Matching</h3>
+          <p>Our smart routing system pairs you with random live users matching your language automatically in seconds.</p>
+        </div>
+        
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper pink">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.2em" width="1.2em" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3>Private Conversations</h3>
+          <p>End-to-end routing ensures your messages remain confidential. Chat history is destroyed when you leave.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <p>&copy; 2026 Chatibb. All rights reserved. Built for real connections.</p>
+      <nav class="footer-nav">
+        <a href="#" id="link-about">About</a>
+        <a href="#" id="link-privacy">Privacy Policy</a>
+        <a href="#" id="link-terms">Terms</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Modal: Anonymous Session Entry Modal -->
+  <div class="modal-overlay" id="modal-entry">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h2>Join Chatibb</h2>
+        <div class="modal-close" id="btn-close-entry">&times;</div>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">
+          To keep matching safe and real, please specify your session info. No password or emails required. All data vanishes when you close the browser.
+        </p>
+
+        <!-- Validation Error Message Banner -->
+        <div class="error-msg-box hidden" id="entry-error-msg"></div>
+
+        <form id="entry-form" novalidate>
+          <!-- Nickname -->
+          <div class="form-group">
+            <label for="entry-nickname">Nickname</label>
+            <input type="text" id="entry-nickname" placeholder="Choose a temporary name (3-20 chars)" minlength="3" maxlength="20" required>
+          </div>
+
+          <!-- Grid for Age & Gender -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Age -->
+            <div class="form-group">
+              <label for="entry-age">Age</label>
+              <input type="number" id="entry-age" placeholder="Min 18" required>
+            </div>
+            
+            <!-- Gender Dropdown -->
+            <div class="form-group">
+              <label for="entry-gender">Gender</label>
+              <select id="entry-gender" required>
+                <option value="" disabled selected>Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Country Dropdown -->
+          <div class="form-group">
+            <label for="entry-country">Country</label>
+            <select id="entry-country" required>
+              <option value="" disabled selected>Select your location</option>
+              <option value="US">🇺🇸 United States</option>
+              <option value="JP">🇯🇵 Japan</option>
+              <option value="GB">🇬🇧 United Kingdom</option>
+              <option value="DE">🇩🇪 Germany</option>
+              <option value="FR">🇫🇷 France</option>
+              <option value="CA">🇨🇦 Canada</option>
+              <option value="BR">🇧🇷 Brazil</option>
+              <option value="IN">🇮🇳 India</option>
+              <option value="AU">🇦🇺 Australia</option>
+              <option value="ES">🇪🇸 Spain</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1.15em" width="1.15em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+            Create Temporary Session
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 1: Matching / Search & Success View -->
+  <div class="modal-overlay" id="modal-match">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Chatibb Matchmaker</h2>
+        <div class="modal-close" id="btn-close-match">&times;</div>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Searching Radar Container -->
+        <div class="matching-container" id="searching-container">
+          <div class="radar-wrapper">
+            <div class="radar-pulse"></div>
+            <div class="radar-pulse"></div>
+            <div class="radar-pulse"></div>
+            <div class="radar-scanner"></div>
+            <div class="radar-core"></div>
+          </div>
+          <div class="matching-status" id="match-status-text">Searching for someone online...</div>
+          <p class="matching-tip" id="match-status-tip">Verifying network connection to ensure 100% human match.</p>
+          
+          <!-- Match Stats Panel -->
+          <div class="match-stats-panel">
+            <div class="match-stat-item">
+              <span class="match-stat-label">Online Users</span>
+              <span class="match-stat-value" id="match-stats-online">0</span>
+            </div>
+            <div class="match-stat-item">
+              <span class="match-stat-label">Waiting in Queue</span>
+              <span class="match-stat-value" id="match-stats-waiting">0</span>
+            </div>
+          </div>
+
+          <button class="btn btn-secondary" id="btn-cancel-match" style="margin-top: 24px;">Cancel Search</button>
+        </div>
+
+        <!-- Success Match Animation Container -->
+        <div class="match-success-container hidden" id="match-success-container">
+          <div class="match-success-checkmark">
+            <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+              <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+              <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+            </svg>
+          </div>
+          <h2 class="match-success-title">Match Found! 🎉</h2>
+          <p class="match-success-desc">Get ready to meet <span id="match-success-name">stranger</span>...</p>
+          <div class="match-success-countdown-ring">
+            <div class="countdown-spinner"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: About -->
+  <div class="modal-overlay" id="modal-about">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>About Chatibb</h2>
+        <div class="modal-close" id="btn-close-about">&times;</div>
+      </div>
+      <div class="modal-body legal-content">
+        <h3>Welcome to Chatibb</h3>
+        <p>Chatibb is a premium anonymous communication platform dedicated to creating direct, human-to-human conversations without barriers. We believe in organic connection, devoid of bot intervention or AI simulation. Every single user on Chatibb is a real person seeking meaningful or fun conversations.</p>
+        
+        <h3>Core Principles</h3>
+        <p><strong>100% Real Users:</strong> We use sophisticated, non-intrusive heuristic detection layers to keep bots, automation scripts, and fake users out of our ecosystem.</p>
+        <p><strong>Privacy First:</strong> Your privacy is absolute. We do not store chat histories, IP records, or tracking data on our servers. Your conversations are ephemeral, existing only while both users are active.</p>
+        <p><strong>Zero Registration:</strong> Skip typing emails, verifications, or passwords. Your identity remains safe under a random user tag.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Privacy Policy -->
+  <div class="modal-overlay" id="modal-privacy">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Privacy Policy</h2>
+        <div class="modal-close" id="btn-close-privacy">&times;</div>
+      </div>
+      <div class="modal-body legal-content">
+        <p><em>Last Updated: June 2, 2026</em></p>
+        <h3>1. Data Transmission</h3>
+        <p>Conversations on Chatibb are routed securely through transient memory. We do not write your text communications to any disk or permanent storage systems. Once your session ends, the chat data vanishes immediately from memory.</p>
+        
+        <h3>2. Information We Do Not Collect</h3>
+        <ul>
+          <li>We do not request names, emails, age, or phone numbers.</li>
+          <li>We do not log user IP addresses in correlation with chats.</li>
+          <li>We do not use tracking pixels or sell profile datasets.</li>
+        </ul>
+
+        <h3>3. Device Metadata</h3>
+        <p>We process ephemeral browser details (such as language preferences and layout size) strictly to properly route matching algorithms. This data is never logged or indexed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Terms of Service -->
+  <div class="modal-overlay" id="modal-terms">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Terms of Service</h2>
+        <div class="modal-close" id="btn-close-terms">&times;</div>
+      </div>
+      <div class="modal-body legal-content">
+        <p><em>Last Updated: June 2, 2026</em></p>
+        <h3>1. Acceptance of Terms</h3>
+        <p>By accessing Chatibb, you agree to comply with these terms. You must be at least 18 years old (or the legal age of majority in your jurisdiction) to participate in anonymous chats.</p>
+        
+        <h3>2. Conduct Guidelines</h3>
+        <p>To preserve a safe and authentic environment for real users, you agree not to:</p>
+        <ul>
+          <li>Deploy automated scripts, scrapers, or chat bots.</li>
+          <li>Transmit malware, malicious files, or phishing links.</li>
+          <li>Harass, stalk, or send abusive messages to matching partners.</li>
+          <li>Impersonate brand personnel or system operators.</li>
+        </ul>
+
+        <h3>3. Limitation of Liability</h3>
+        <p>Chatibb is provided on an "as is" and "as available" basis. We hold no liability for behavior or content transmitted by third-party matching partners in anonymous chats.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Invite Slide-in Notification Popup -->
+  <div class="invite-notification" id="invite-notification">
+    <div class="invite-avatar" id="invite-avatar">L</div>
+    <div class="invite-details">
+      <h4>Chat Request</h4>
+      <p><span id="invite-sender-name">Liam</span> wants to chat!</p>
+    </div>
+    <div class="invite-actions">
+      <button class="btn-invite-accept" id="btn-invite-accept">Accept</button>
+      <button class="btn-invite-decline" id="btn-invite-decline">Decline</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
