@@ -1370,11 +1370,23 @@ a {
 /* Responsive Lobby Rules */
 @media (max-width: 1024px) {
   .lobby-layout-grid {
+    display: grid;
     grid-template-columns: 1fr;
     gap: 24px;
   }
+  .lobby-left-panel {
+    display: contents;
+  }
+  .match-engine-card {
+    order: 1;
+  }
+  .lobby-right-panel {
+    order: 2;
+  }
+  .session-details-card {
+    order: 3;
+  }
 }
-
 
 @media (max-width: 768px) {
   .lobby-header-row {
@@ -1390,6 +1402,66 @@ a {
   .controls-bar {
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  /* Mobile Performance & Flickering Fixes */
+  .glow-blob {
+    animation: none !important;
+    display: none !important; /* Remove background blobs to optimize paint */
+  }
+
+  .lobby-card,
+  .chat-view-container,
+  .modal-box,
+  .offline-box {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(13, 18, 30, 0.98) !important; /* solid fallback to prevent rendering flicker */
+  }
+
+  /* Height Stabilization for Virtual Keyboards */
+  .chat-view-container {
+    height: 72vh !important;
+    max-height: 520px !important;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+/* Compact Mobile Buttons */
+@media (max-width: 600px) {
+  .chat-header {
+    padding: 10px 14px;
+  }
+  .chat-peer-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  .chat-peer-details h4 {
+    font-size: 0.85rem;
+  }
+  .chat-peer-details p {
+    font-size: 0.7rem;
+  }
+  .chat-header-actions {
+    gap: 4px;
+  }
+  .chat-control-btn {
+    padding: 6px 8px;
+    font-size: 0.72rem;
+  }
+  .chat-header-actions .btn-text {
+    display: none; /* Hide long labels on small viewports */
+  }
+  #btn-chat-block::before {
+    content: '🚫';
+  }
+  #btn-chat-report::before {
+    content: '⚠️';
+  }
+  #btn-chat-leave::before {
+    content: '🚪';
   }
 }
 
